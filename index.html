@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ball Shooter Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            cursor: crosshair;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            color: white;
+            font-size: 18px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .score {
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .timer {
+            font-weight: bold;
+            color: #ffeb3b;
+        }
+
+        .ball {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        .ball:hover {
+            transform: scale(1.1);
+        }
+
+        .ball.hit {
+            animation: explode 0.3s ease-out forwards;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
+        }
+
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.7; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .score-popup {
+            position: absolute;
+            color: #fff;
+            font-weight: bold;
+            font-size: 20px;
+            pointer-events: none;
+            animation: scoreFloat 1s ease-out forwards;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        @keyframes scoreFloat {
+            0% { transform: translateY(0px); opacity: 1; }
+            100% { transform: translateY(-50px); opacity: 0; }
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 2000;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .game-over h2 {
+            margin-bottom: 20px;
+            color: #ffeb3b;
+            font-size: 36px;
+        }
+
+        .final-score {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .play-again {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .play-again:hover {
+            transform: scale(1.05);
+        }
+
+        .start-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .start-screen h1 {
+            margin-bottom: 20px;
+            color: #ffeb3b;
+            font-size: 48px;
+        }
+
+        .instructions {
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .start-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .crosshair {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.7;
+        }
+
+        .crosshair::before,
+        .crosshair::after {
+            content: '';
+            position: absolute;
+            background: #fff;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .crosshair::before {
+            width: 20px;
+            height: 2px;
+            top: 9px;
+            left: 0;
+        }
+
+        .crosshair::after {
+            width: 2px;
+            height: 20px;
+            top: 0;
+            left: 9px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container" id="gameContainer">
+        <div class="crosshair" id="crosshair"></div>
+        
+        <div class="hud">
+            <div class="score">Score: <span id="score">0</span></div>
+            <div class="timer">Time: <span id="timer">60</span>s</div>
+        </div>
+
+        <div class="start-screen" id="startScreen">
+            <h1>🎯 Ball Shooter</h1>
+            <div class="instructions">
+                <p>Click the colorful balls to score points!</p>
+                <p>Different colored balls give different scores:</p>
+                <p>🔴 Red: 10 points | 🟡 Yellow: 15 points | 🟢 Green: 20 points</p>
+                <p>🔵 Blue: 25 points | 🟣 Purple: 30 points</p>
+                <p>You have 60 seconds - Good luck!</p>
+            </div>
+            <button class="start-btn" onclick="startGame()">Start Game</button>
+        </div>
+
+        <div class="game-over" id="gameOver">
+            <h2>🎉 Game Over!</h2>
+            <div class="final-score">Final Score: <span id="finalScore">0</span></div>
+            <button class="play-again" onclick="restartGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        let gameState = {
+            score: 0,
+            timeLeft: 60,
+            gameActive: false,
+            balls: [],
+            ballInterval: null,
+            gameTimer: null
+        };
+
+        const ballColors = [
+            { color: '#ff4757', points: 10 },
+            { color: '#ffa502', points: 15 },
+            { color: '#2ed573', points: 20 },
+            { color: '#3742fa', points: 25 },
+            { color: '#8e44ad', points: 30 }
+        ];
+
+        function startGame() {
+            document.getElementById('startScreen').style.display = 'none';
+            gameState.gameActive = true;
+            gameState.score = 0;
+            gameState.timeLeft = 60;
+            updateUI();
+            
+            // Start spawning balls
+            gameState.ballInterval = setInterval(spawnBall, 800);
+            
+            // Start countdown timer
+            gameState.gameTimer = setInterval(() => {
+                gameState.timeLeft--;
+                updateUI();
+                
+                if (gameState.timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function spawnBall() {
+            if (!gameState.gameActive) return;
+            
+            const ball = document.createElement('div');
+            ball.className = 'ball';
+            
+            const ballType = ballColors[Math.floor(Math.random() * ballColors.length)];
+            const size = Math.random() * 40 + 30; // 30-70px
+            
+            ball.style.width = size + 'px';
+            ball.style.height = size + 'px';
+            ball.style.backgroundColor = ballType.color;
+            ball.style.left = Math.random() * (window.innerWidth - size) + 'px';
+            ball.style.top = Math.random() * (window.innerHeight - size) + 'px';
+            
+            ball.dataset.points = ballType.points;
+            ball.onclick = () => shootBall(ball);
+            
+            document.getElementById('gameContainer').appendChild(ball);
+            gameState.balls.push(ball);
+            
+            // Remove ball after 3 seconds if not clicked
+            setTimeout(() => {
+                if (ball.parentNode) {
+                    ball.parentNode.removeChild(ball);
+                    gameState.balls = gameState.balls.filter(b => b !== ball);
+                }
+            }, 3000);
+        }
+
+        function shootBall(ball) {
+            if (!gameState.gameActive) return;
+            
+            const points = parseInt(ball.dataset.points);
+            gameState.score += points;
+            
+            // Show score popup
+            showScorePopup(points, ball.offsetLeft + ball.offsetWidth/2, ball.offsetTop + ball.offsetHeight/2);
+            
+            // Add hit animation
+            ball.classList.add('hit');
+            
+            // Remove ball after animation
+            setTimeout(() => {
+                if (ball.parentNode) {
+                    ball.parentNode.removeChild(ball);
+                    gameState.balls = gameState.balls.filter(b => b !== ball);
+                }
+            }, 300);
+            
+            updateUI();
+        }
+
+        function showScorePopup(points, x, y) {
+            const popup = document.createElement('div');
+            popup.className = 'score-popup';
+            popup.textContent = '+' + points;
+            popup.style.left = x + 'px';
+            popup.style.top = y + 'px';
+            
+            document.getElementById('gameContainer').appendChild(popup);
+            
+            setTimeout(() => {
+                if (popup.parentNode) {
+                    popup.parentNode.removeChild(popup);
+                }
+            }, 1000);
+        }
+
+        function updateUI() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('timer').textContent = gameState.timeLeft;
+        }
+
+        function endGame() {
+            gameState.gameActive = false;
+            clearInterval(gameState.ballInterval);
+            clearInterval(gameState.gameTimer);
+            
+            // Remove all remaining balls
+            gameState.balls.forEach(ball => {
+                if (ball.parentNode) {
+                    ball.parentNode.removeChild(ball);
+                }
+            });
+            gameState.balls = [];
+            
+            // Show game over screen
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('gameOver').style.display = 'block';
+        }
+
+        function restartGame() {
+            document.getElementById('gameOver').style.display = 'none';
+            startGame();
+        }
+
+        // Update crosshair position
+        document.addEventListener('mousemove', (e) => {
+            const crosshair = document.getElementById('crosshair');
+            crosshair.style.left = (e.clientX - 10) + 'px';
+            crosshair.style.top = (e.clientY - 10) + 'px';
+        });
+
+        // Prevent context menu on right click
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
