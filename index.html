@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +27,7 @@
             width: 100vw;
             height: 100vh;
             cursor: crosshair;
-            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%);
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
         }
 
         .hud {
@@ -36,7 +37,7 @@
             z-index: 1000;
             color: white;
             font-size: 18px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .score {
@@ -55,7 +56,7 @@
             border-radius: 50%;
             cursor: pointer;
             transition: transform 0.1s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             animation: bounce 2s infinite ease-in-out;
         }
 
@@ -68,14 +69,32 @@
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-10px) scale(1.05); }
+
+            0%,
+            100% {
+                transform: translateY(0px) scale(1);
+            }
+
+            50% {
+                transform: translateY(-10px) scale(1.05);
+            }
         }
 
         @keyframes explode {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.7; }
-            100% { transform: scale(0); opacity: 0; }
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.5);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
         }
 
         .score-popup {
@@ -85,12 +104,19 @@
             font-size: 20px;
             pointer-events: none;
             animation: scoreFloat 1s ease-out forwards;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
         }
 
         @keyframes scoreFloat {
-            0% { transform: translateY(0px); opacity: 1; }
-            100% { transform: translateY(-50px); opacity: 0; }
+            0% {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
         }
 
         .game-over {
@@ -98,14 +124,14 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.9);
+            background: rgba(0, 0, 0, 0.9);
             color: white;
             padding: 40px;
             border-radius: 15px;
             text-align: center;
             z-index: 2000;
             display: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .game-over h2 {
@@ -139,13 +165,13 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.9);
+            background: rgba(0, 0, 0, 0.9);
             color: white;
             padding: 40px;
             border-radius: 15px;
             text-align: center;
             z-index: 2000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .start-screen h1 {
@@ -155,9 +181,62 @@
         }
 
         .instructions {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             font-size: 16px;
             line-height: 1.6;
+        }
+
+        .difficulty-section {
+            margin-bottom: 30px;
+        }
+
+        .difficulty-title {
+            color: #ffeb3b;
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .difficulty-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: 2px solid transparent;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .difficulty-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .difficulty-btn.selected {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            border-color: #fff;
+            transform: scale(1.1);
+        }
+
+        .difficulty-btn.easy {
+            background: linear-gradient(45deg, #2ed573, #20bf6b);
+        }
+
+        .difficulty-btn.medium {
+            background: linear-gradient(45deg, #ffa502, #ff6348);
+        }
+
+        .difficulty-btn.hard {
+            background: linear-gradient(45deg, #ff3838, #c44569);
         }
 
         .start-btn {
@@ -169,10 +248,17 @@
             border-radius: 8px;
             cursor: pointer;
             transition: transform 0.2s ease;
+            margin-top: 20px;
         }
 
         .start-btn:hover {
             transform: scale(1.05);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .crosshair {
@@ -189,7 +275,7 @@
             content: '';
             position: absolute;
             background: #fff;
-            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         }
 
         .crosshair::before {
@@ -207,10 +293,11 @@
         }
     </style>
 </head>
+
 <body>
     <div class="game-container" id="gameContainer">
         <div class="crosshair" id="crosshair"></div>
-        
+
         <div class="hud">
             <div class="score">Score: <span id="score">0</span></div>
             <div class="timer">Time: <span id="timer">60</span>s</div>
@@ -225,6 +312,22 @@
                 <p>🔵 Blue: 25 points | 🟣 Purple: 30 points</p>
                 <p>You have 60 seconds - Good luck!</p>
             </div>
+
+            <div class="difficulty-section">
+                <div class="difficulty-title">Choose Difficulty Level:</div>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn easy" onclick="selectDifficulty('easy', this)">
+                        Easy<br><small>Slow & Big</small>
+                    </button>
+                    <button class="difficulty-btn medium selected" onclick="selectDifficulty('medium', this)">
+                        Medium<br><small>Normal</small>
+                    </button>
+                    <button class="difficulty-btn hard" onclick="selectDifficulty('hard', this)">
+                        Hard<br><small>Fast & Small</small>
+                    </button>
+                </div>
+            </div>
+
             <button class="start-btn" onclick="startGame()">Start Game</button>
         </div>
 
@@ -242,7 +345,32 @@
             gameActive: false,
             balls: [],
             ballInterval: null,
-            gameTimer: null
+            gameTimer: null,
+            difficulty: 'medium'
+        };
+
+        const difficultySettings = {
+            easy: {
+                spawnRate: 1200,
+                ballLifetime: 4000,
+                ballSizeMin: 50,
+                ballSizeMax: 90,
+                name: 'Easy'
+            },
+            medium: {
+                spawnRate: 800,
+                ballLifetime: 3000,
+                ballSizeMin: 30,
+                ballSizeMax: 70,
+                name: 'Medium'
+            },
+            hard: {
+                spawnRate: 500,
+                ballLifetime: 2000,
+                ballSizeMin: 20,
+                ballSizeMax: 50,
+                name: 'Hard'
+            }
         };
 
         const ballColors = [
@@ -253,21 +381,35 @@
             { color: '#8e44ad', points: 30 }
         ];
 
+        function selectDifficulty(difficulty, button) {
+            gameState.difficulty = difficulty;
+
+            // Remove selected class from all buttons
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Add selected class to clicked button
+            button.classList.add('selected');
+        }
+
         function startGame() {
             document.getElementById('startScreen').style.display = 'none';
             gameState.gameActive = true;
             gameState.score = 0;
             gameState.timeLeft = 60;
             updateUI();
-            
-            // Start spawning balls
-            gameState.ballInterval = setInterval(spawnBall, 800);
-            
+
+            const settings = difficultySettings[gameState.difficulty];
+
+            // Start spawning balls based on difficulty
+            gameState.ballInterval = setInterval(spawnBall, settings.spawnRate);
+
             // Start countdown timer
             gameState.gameTimer = setInterval(() => {
                 gameState.timeLeft--;
                 updateUI();
-                
+
                 if (gameState.timeLeft <= 0) {
                     endGame();
                 }
@@ -276,46 +418,47 @@
 
         function spawnBall() {
             if (!gameState.gameActive) return;
-            
+
+            const settings = difficultySettings[gameState.difficulty];
             const ball = document.createElement('div');
             ball.className = 'ball';
-            
+
             const ballType = ballColors[Math.floor(Math.random() * ballColors.length)];
-            const size = Math.random() * 40 + 30; // 30-70px
-            
+            const size = Math.random() * (settings.ballSizeMax - settings.ballSizeMin) + settings.ballSizeMin;
+
             ball.style.width = size + 'px';
             ball.style.height = size + 'px';
             ball.style.backgroundColor = ballType.color;
             ball.style.left = Math.random() * (window.innerWidth - size) + 'px';
             ball.style.top = Math.random() * (window.innerHeight - size) + 'px';
-            
+
             ball.dataset.points = ballType.points;
             ball.onclick = () => shootBall(ball);
-            
+
             document.getElementById('gameContainer').appendChild(ball);
             gameState.balls.push(ball);
-            
-            // Remove ball after 3 seconds if not clicked
+
+            // Remove ball after specified lifetime based on difficulty
             setTimeout(() => {
                 if (ball.parentNode) {
                     ball.parentNode.removeChild(ball);
                     gameState.balls = gameState.balls.filter(b => b !== ball);
                 }
-            }, 3000);
+            }, settings.ballLifetime);
         }
 
         function shootBall(ball) {
             if (!gameState.gameActive) return;
-            
+
             const points = parseInt(ball.dataset.points);
             gameState.score += points;
-            
+
             // Show score popup
-            showScorePopup(points, ball.offsetLeft + ball.offsetWidth/2, ball.offsetTop + ball.offsetHeight/2);
-            
+            showScorePopup(points, ball.offsetLeft + ball.offsetWidth / 2, ball.offsetTop + ball.offsetHeight / 2);
+
             // Add hit animation
             ball.classList.add('hit');
-            
+
             // Remove ball after animation
             setTimeout(() => {
                 if (ball.parentNode) {
@@ -323,7 +466,7 @@
                     gameState.balls = gameState.balls.filter(b => b !== ball);
                 }
             }, 300);
-            
+
             updateUI();
         }
 
@@ -333,9 +476,9 @@
             popup.textContent = '+' + points;
             popup.style.left = x + 'px';
             popup.style.top = y + 'px';
-            
+
             document.getElementById('gameContainer').appendChild(popup);
-            
+
             setTimeout(() => {
                 if (popup.parentNode) {
                     popup.parentNode.removeChild(popup);
@@ -352,7 +495,7 @@
             gameState.gameActive = false;
             clearInterval(gameState.ballInterval);
             clearInterval(gameState.gameTimer);
-            
+
             // Remove all remaining balls
             gameState.balls.forEach(ball => {
                 if (ball.parentNode) {
@@ -360,15 +503,28 @@
                 }
             });
             gameState.balls = [];
-            
+
             // Show game over screen
             document.getElementById('finalScore').textContent = gameState.score;
             document.getElementById('gameOver').style.display = 'block';
+
+            // Show difficulty info in game over screen
+            const difficultyInfo = document.createElement('div');
+            difficultyInfo.style.marginBottom = '20px';
+            difficultyInfo.style.fontSize = '18px';
+            difficultyInfo.textContent = `Difficulty: ${difficultySettings[gameState.difficulty].name}`;
+            document.getElementById('gameOver').insertBefore(difficultyInfo, document.querySelector('.play-again'));
         }
 
         function restartGame() {
+            // Remove difficulty info if it exists
+            const existingDifficultyInfo = document.querySelector('#gameOver div:nth-child(3)');
+            if (existingDifficultyInfo && existingDifficultyInfo.textContent.includes('Difficulty:')) {
+                existingDifficultyInfo.remove();
+            }
+
             document.getElementById('gameOver').style.display = 'none';
-            startGame();
+            document.getElementById('startScreen').style.display = 'block';
         }
 
         // Update crosshair position
@@ -384,4 +540,5 @@
         });
     </script>
 </body>
+
 </html>
